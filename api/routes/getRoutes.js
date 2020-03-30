@@ -2,7 +2,7 @@ const { Router } = require("express");
 const router = Router();
 const { searchNotYetAcceptedJobs, 
     // searchJobsByCategory,searchJobsByCity, searchJobsByPincode, searchJobById, searchJobByKeyword, searchAllJobs,searchAcceptedJobs, allJobsAcceptedTillDateByAParticularSeeker, jobsPostedByAParticularProvider, 
-    providerAccountActivation, seekerAccountActivation 
+    providerAccountActivation, seekerAccountActivation ,accountActivation
 }=require("../controllers/getControllers")
 const {authenticateProvidersToken, authenticateSeekersToken} = require("../middlewares/authenticate")
 
@@ -26,6 +26,9 @@ router.get(`/api/jobseeker/searchjobs/notyetaccepted/:pagenumber/`, searchNotYet
 router.get(`/api/provideraccountactivation/:activationtoken`,providerAccountActivation)
 router.get(`/api/seekeraccountactivation/:activationtoken`,seekerAccountActivation)
 
+// router.get(`/api/accountactivation/:activationtoken`,accountActivation)
+
+// ?user="Job-Provider"
 
 // -----------------------Admin Routes---------------------------
 

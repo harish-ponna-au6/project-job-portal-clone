@@ -1,4 +1,4 @@
-const JobDetail = require("../models/Job")
+const JobDetails = require("../models/Job")
 const JobProviderDetails = require("../models/JobProvider")
 const JobSeekerDetails = require("../models/jobSeeker")
 const jwt = require("jsonwebtoken")
@@ -7,11 +7,11 @@ module.exports = {
 
     async searchNotYetAcceptedJobs(req, res) {
         try {
-            const jobs = await JobDetail.findAndCountAll({
+            const jobs = await JobDetails.findAndCountAll({
                 where: { isAccepted: false },
                 offset: (((req.params.pagenumber) - 1) * 5),
                 limit: 5,
-                order: ['updatedAt', 'DESC']
+                order: [['updatedAt', 'DESC']]
             })
             res.status(302).json({ 'jobs': jobs })
         }
@@ -198,7 +198,35 @@ module.exports = {
             if (!req.params.activationtoken) return res.status(401)
             const payload = await jwt.verify(req.params.activationtoken, process.env.TEMP_TOKEN_SECRET);
             if (payload) {
-                const updated=await JobSeekerDetails.update({ isVerified: true, activationToken: " " }, {
+                const updated=await JobSeekerDetails.update({ isVerified: true, activationToken: null }, {
+                    where: {
+                        activationToken: req.params.activationtoken
+                    }
+                })
+                console.log(updated);
+                if(updated[0]!==0) return res.status(200).send("Account activated Successfully");
+                return res.status(401).send("Account already activated")
+            }
+            return res.send("Invalid Token")
+        }
+        catch (err) {
+            console.log(err);
+            res.sendStatus(500)
+        }
+    },
+
+
+    async accountActivation(req, res) {
+        try {
+            if(!req.query.user) throw new Error("invalid route")
+            if(req.query.user==="Job-Provider") model =JobProviderDetails
+            if(req.query.user==="Job-Seeker") model =JobSeekerDetails
+
+
+            if (!req.params.activationtoken) return res.status(401)
+            const payload = await jwt.verify(req.params.activationtoken, process.env.TEMP_TOKEN_SECRET);
+            if (payload) {
+                const updated=await model.update({ isVerified: true, activationToken: null }, {
                     where: {
                         activationToken: req.params.activationtoken
                     }

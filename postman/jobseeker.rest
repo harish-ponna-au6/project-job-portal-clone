@@ -4,7 +4,8 @@
 ###################  GET 
 
 ###  Account Activation
-GET http://localhost:8080/api/seekeraccountactivation/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MC4zMjM4ODI4Mjk3NDQ4NzU3LCJpYXQiOjE1ODU1MDg0MTJ9.PhnuQr8E2KMiblMQniWxiz4QUOLe89b5cZ9J0RICGog
+GET http://localhost:8080/api/seekeraccountactivation/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MC43OTUwNjIzMTk3NjcxNDQsImlhdCI6MTU4NTU1MjcyMX0.Vl-4NNenpmIU6jQIp7Lg48E5Mch2jxMCwR4I_twUBSg
+
 ### showing all jobs which are available
 GET http://localhost:8080/api/jobseeker/searchjobs/notyetaccepted/1/
 
@@ -33,11 +34,11 @@ POST http://localhost:8080/api/user/register
 content-type: application/json
 
 {
-  	"name": "Minnu",
-    "email":"Minnu@gmail.com",
+  	"name": "Siddhida",
+    "email":"Siddhida@gmail.com",
     "password":"1234",
    "aadhaarNumber" :124451789789,
-  "gender":"male",
+  "gender":"female",
    "contactNumber" : 1234167391,
    "address" : "Ranchi abcdefghtikjjh",
    "role" : "Job-Seeker"
@@ -50,7 +51,7 @@ content-type: application/json
 
 {
     "email":"jhasiddhida@gmail.com",
-    "password":"123",
+    "password":"1234",
     "role":"Job-Seeker"
 }
 
@@ -65,7 +66,7 @@ Authorization:
 ###   Job Accepting by Seeker
 PATCH http://localhost:8080/api/jobseeker/searchjobs/byjobid/5e7dd002e8bc1f031490605a/isaccepted
 Content-Type: application/json
-Authorization:  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTdkYjkzNTdiMDI5MzJjYmNmYWQ5OTUiLCJpYXQiOjE1ODUyOTc3ODgsImV4cCI6MTU4NTY1Nzc4OH0.IXuA4Fof2nMn-ZMOx9wUJE3jTTOrWV8kRjYsB9fEiLQ
+Authorization:  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNTg1NTU0MTc1LCJleHAiOjE1OTE1NTQxNzV9.Y1gRlwNR2_Orqq2gT84t7OR7P4i3aPJgGgu-iq-qEtA
 
 
 

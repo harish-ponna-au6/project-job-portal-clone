@@ -88,11 +88,11 @@ const jobDetailModel = {
         allowNull: true
     },
     jobSeekerContactNumber: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.BIGINT,
         allowNull: true
     },
     jobSeekerAadhaarNumber: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.BIGINT,
         allowNull: true,
     }
 

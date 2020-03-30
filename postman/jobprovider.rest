@@ -82,7 +82,26 @@ Content-Type: image/png
 
 
 ###  Job updation by Provider Account
-PATCH http://localhost:8080/api/jobprovider/udpatingjob/:jobid/
+PATCH http://localhost:8080/api/jobprovider/udpatingjob/1/
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNTg1NTE1NzgyLCJleHAiOjE1OTE1MTU3ODJ9.VU17HbLo3Etxf4QAUVddrMD2gMBg32WZDxeOyzc5y_o
+
+{
+            "category":"yearly",
+            "duration": 5,
+            "title":"calendar tutor",
+            "description":"calendar teaching for my kid",
+            "preferedSkills":"musician",
+            "rateOfPayment":500,
+            "preference":"any",
+			       "timeSlot":"1pm-6pm",
+            "keyword":"cricket",
+            "jobProviderName":"Harish",
+            "contactNumber": 8977700000,
+            "city": "Hyderabad",
+            "pincode": 500060,
+            "address": "hyderabad chikkadpally"
+        }
 
 
 ################ DELETE
