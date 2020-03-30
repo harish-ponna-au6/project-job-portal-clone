@@ -3,6 +3,9 @@ const JobSeekerDetails = require("../models/jobSeeker")
 const JobProviderDetails = require("../models/JobProvider")
 const { isAcceptedMailToSeeker, isAcceptedMailToProvider } = require("../utils/nodeMailer")
 
+const cloudinary = require("../utils/cloudinary")
+const convertBufferToString = require("../utils/convertBufferToString")
+
 function jobSeekerJobsIncrement(totalPosted) {
     return totalPosted += 1
 }
@@ -26,18 +29,48 @@ module.exports = {
     },
     async isAcceptedJob (req,res){
         try{
-            await JobDetails.update({isAccepted:true,jobSeekerId: req.jobSeeker.id, jobSeekerName: req.jobSeeker.name, jobSeekerContactNumber: req.jobSeeker.contactNumber, jobSeekerAadhaarNumber: req.jobSeeker.aadhaarNumber},{
+            const [job, count] = await JobDetails.update({isAccepted:true,jobSeekerId: req.jobSeeker.id, jobSeekerName: req.jobSeeker.name, jobSeekerContactNumber: req.jobSeeker.contactNumber, jobSeekerAadhaarNumber: req.jobSeeker.aadhaarNumber},{
                 where:{
                     id:req.params.jobid
                 }
             })
+            console.log("Is Accepted Count information ====", count)
+            console.log("Is Accepted Job information ====", job)
+            isAcceptedMailToProvider(job.jobProviderEmail, job.title, job.createdAt, req.jobSeeker.name);
             return res.send("Job accepted")
         }
         catch(err){
             console.log(err)
             return res.status(304)
         }
+    },
+  async uploadProviderProfilePicture(req,res){
+    try {
+      let imageContent = convertBufferToString(req.file.originalname,req.file.buffer)
+      let imageResponse = await cloudinary.uploader.upload(imageContent)
+      console.log("imageResponse = ",imageResponse)
+      console.log("imageUrl=",imageResponse.url)
+      console.log("req.jobProvider._id=",req.jobProvider._id)
+      JobProviderDetail.findByIdAndUpdate(req.jobProvider._id,{profilePicture:imageResponse.secure_url})
+      res.send("Provider uploaded Profile picture successfully") 
+    } catch (error) {
+      console.log(error)
     }
+  },
+
+ async uploadSeekerProfilePicture(req,res){
+   try {
+    let imageContent = convertBufferToString(req.file.originalname,req.file.buffer)
+    let imageResponse = await cloudinary.uploader.upload(imageContent)
+        JobSeekerDetail.findByIdAndUpdate(req.jobSeeker._id,{profilePicture:imageResponse.secure_url})      
+        console.log(imageResponse)
+        res.send("Seeker uploaded Profile picture successfully")
+   } catch (error) {
+    console.log(error)
+   }
+   } 
+}  
+
     // isAcceptedJob: function (req, res) {
 
     //     JobDetail.findByIdAndUpdate(req.params.jobid, { isAccepted: true, jobSeekerId: req.jobSeeker._id, jobSeekerName: req.jobSeeker.name, jobSeekerContactNumber: req.jobSeeker.contactNumber, jobSeekerAadhaarNumber: req.jobSeeker.aadhaarNumber })
@@ -70,5 +103,5 @@ module.exports = {
     //         })
     //         .catch((err) => res.status(304))
     // },
-}
+
 

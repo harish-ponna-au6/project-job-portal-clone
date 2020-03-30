@@ -58,17 +58,15 @@ content-type: application/json
 ###   Uploading Profile Picture
 POST http://localhost:8080/api/jobseeker/uploadprofilepicture
 Content-Type: application/json
-Authorization:
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNTg1NTU4MzAyLCJleHAiOjE1OTE1NTgzMDJ9.xmTNVe_wLcBwNzenDDFUJhp5rzgJnTRpj1ENYcmDUiY
 
 
 ###################  UPDATE
 
 ###   Job Accepting by Seeker
-PATCH http://localhost:8080/api/jobseeker/searchjobs/byjobid/5e7dd002e8bc1f031490605a/isaccepted
+PATCH http://localhost:8080/api/jobseeker/searchjobs/byjobid/3/isaccepted
 Content-Type: application/json
-Authorization:  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNTg1NTU0MTc1LCJleHAiOjE1OTE1NTQxNzV9.Y1gRlwNR2_Orqq2gT84t7OR7P4i3aPJgGgu-iq-qEtA
-
-
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNTg1NTU4MzAyLCJleHAiOjE1OTE1NTgzMDJ9.xmTNVe_wLcBwNzenDDFUJhp5rzgJnTRpj1ENYcmDUiY
 
 
 ###  Logging out from Seeker Account

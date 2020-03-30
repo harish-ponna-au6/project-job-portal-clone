@@ -1,10 +1,7 @@
 const { Router } = require("express");
 const router = Router();
-const upload = require("../utils/multer")
-const { userRegister,
-    postingJob,  userLogin,
-    //  uploadProviderProfilePicture, uploadSeekerProfilePicture 
-} = require("../controllers/postControllers")
+
+const { userRegister,postingJob, userLogin} = require("../controllers/postControllers")
 
 const {authenticateProvidersToken, authenticateSeekersToken} = require("../middlewares/authenticate")
 
@@ -23,11 +20,6 @@ router.post(`/api/user/register`,  userRegister); // parameter 'email' is name o
 router.post(`/api/user/login`,userLogin); 
 
 
-// // --------------------Uploading Profile Picture------------------------------
-
-// router.post(`/api/jobprovider/uploadprofilepicture`, authenticateProvidersToken, upload.single("image"), uploadProviderProfilePicture);
-
-// router.post(`/api/jobseeker/uploadprofilepicture`, authenticateSeekersToken, upload.single("image"), uploadSeekerProfilePicture); 
 
 
 
