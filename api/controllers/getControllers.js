@@ -21,22 +21,59 @@ module.exports = {
         }
     },
 
+    async filterJobs(req, res){
+        try {
+            if (!req.query) res.return("Please enter a definite query to filter out jobs")
+            if (req.query.category) {
+                console.log("Request.Query.Category = ", req.query.category);
+                var jobs =  await JobDetails.findAndCountAll({
+                where: { isAccepted: false, category: req.query.category },
+                offset: (((req.params.pagenumber) - 1) * 5),
+                limit: 5,
+                order: [['updatedAt', 'DESC']]
+            })
+            console.log("req.query.category = ", jobs )
+           }            
+            if (req.query.city) { 
+                var jobs = await JobDetails.findAndCountAll({
+                where: { isAccepted: false, city: req.query.city },
+                offset: (((req.params.pagenumber) - 1) * 5),
+                limit: 5,
+                order: [['updatedAt', 'DESC']]
+            })
+             console.log("req.query.city = ", jobs ) }
+            if (req.query.pincode) {
+                var jobs = await JobDetails.findAndCountAll({
+                where: { isAccepted: false, city: req.query.pincode },
+                offset: (((req.params.pincode) - 1) * 5),
+                limit: 5,
+                order: [['updatedAt', 'DESC']]
+            })
+            console.log("req.query.pincode = ", jobs ) }      
+            if (req.query.preference) { 
+                var jobs = await JobDetails.findAndCountAll({
+                where: { isAccepted: false, preference: req.query.preference },
+                offset: (((req.params.pagenumber) - 1) * 5),
+                limit: 5,
+                order: [['updatedAt', 'DESC']]
+            }) 
+            console.log("req.query.prefeerence = ", jobs )}
+            if (req.query.keyword) { 
+                var jobs = await JobDetails.findAndCountAll({
+                where: { isAccepted: false, keyword: req.query.keyword },
+                offset: (((req.params.pagenumber) - 1) * 5),
+                limit: 5,
+                order: [['updatedAt', 'DESC']]
+            })
+            console.log("req.query.keyword = ", jobs )
+             }
+             res.status(302).json({ 'jobs': jobs })
+        } catch (error) {
+            console.log(error)
+            res.sendStatus(500)
+        }
+    },
 
-    // searchNotYetAcceptedJobs: function (req, res) {
-    //     JobDetail.find({ isAccepted: false })
-    //         .skip(((req.params.pagenumber) - 1) * 5)
-    //         .limit(5)
-    //         .sort({ createdAt: -1 })
-    //         .then((notYetAcceptedJobs) => {
-    //             JobDetail.find({})
-    //                 .countDocuments({}, function (err, count) { console.log("count = ", count); res.status(302).json({ 'count': count, 'notYetAcceptedJobs': notYetAcceptedJobs }) });
-
-    //         })
-    //         .catch((err) => {
-    //             console.log(err.message)
-    //             return res.status(404).send(err.message)
-    //         });
-    // },
     // searchJobsByCategory: function (req, res) {
     //     JobDetail.find({ isAccepted: false, category: req.params.category })
     //         .skip(((req.params.pagenumber) - 1) * 5)

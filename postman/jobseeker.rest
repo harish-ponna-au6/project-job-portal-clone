@@ -12,6 +12,9 @@ GET http://localhost:8080/api/jobseeker/searchjobs/notyetaccepted/1/
 ### filtering jobs by category of hourly, daily, weekly, monthly
 GET http://localhost:8080/api/jobseeker/searchjobs/bycategory/:category/1
 
+###
+GET http://localhost:8080/api/jobseeker/searchjobs/filter/1?category=hourly
+
 ### filtering jobs by city
 GET http://localhost:8080/api/jobseeker/searchjobs/bycity/:city/1
 
