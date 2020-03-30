@@ -7,41 +7,32 @@ function jobProviderJobsDecrement(totalPosted) {
 }
 
 module.exports = {
+    // ----------------------Deleting a Posted-Job by Job-Provider------------------------
     async deletingJob(req, res) {
         try {
-            const destroyed = await JobDetails.destroy({where:{ id: req.params.jobid }});
-            if(!destroyed) throw new Error('Job do not exist(or)deleted already') 
+            const destroyed = await JobDetails.destroy({ where: { id: req.params.jobid } });
+            if (!destroyed) throw new Error('Job do not exist(or)deleted already')
             const jobProviderDetails = await JobProviderDetails.findOne({ id: req.jobProvider.id })
             const totalPosted = jobProviderJobsDecrement(jobProviderDetails.totalPosted)
             jobProviderDetails.totalPosted = totalPosted;
             jobProviderDetails.save()
             return res.status(202).send("One job deleted Successfully")
         } catch (error) {
-            console.log(error.message);
-            return res.status(404).send('Job do not exist(or)deleted already')
-
+            return res.status(404).send(error.message)
         }
     },
 
-    async jobProviderLogout (req, res) {
+    // ----------------------Logout from Account (Job-Provider & Job-Seeker)------------------------
+    async Logout(req, res) {
         try {
-            await JobProviderDetails.update({ jwt: "" }, {
-                where: { id: req.jobProvider.id }
+            if (req.jobProvider) { var model = JobProviderDetails; var user = req.jobProvider }
+            if (req.jobSeekers) { var model = JobSeekerDetails; var user = req.jobSeeker }
+            await model.update({ jwt: null }, {
+                where: { id: user.id }
             })
-            console.log("You are successfully logged out.")
-            return res.status(202).send("You successfully logged out");
+            return res.status(202).send("You are successfully logged out");
         } catch (error) {
-            res.status(404).send(err.message)
+            res.status(404).send(error.message)
         }
-    },
-
-    async jobSeekerLogout (req, res) {
-        try {
-            console.log("You are succefully logged out.")
-            return status(202).send("You successfully logged out.");
-        } catch (error) {
-            res.status(404).send(err.message)
-        }
-       
     }
 }

@@ -50,31 +50,14 @@ const jobDetailModel = {
         type: Sequelize.STRING,
         allowNull: false,
     },
-    isAccepted: {
-        type: Sequelize.BOOLEAN,
-        defaultValue: false
+    keyword: {
+        type: Sequelize.STRING,
+        allowNull: false
     },
     jobProviderId: {
         type: Sequelize.BIGINT,
-        allowNull:true,
-        // references: {
-        //     model: 'jobProviderDetail',
-        //     key: 'id'
-        // }
+        allowNull: true,
     },
-    jobSeekerId: {
-        type: Sequelize.BIGINT,
-        allowNull:true,
-        // references: {
-        //     model: 'jobProviderDetail',
-        //     key: 'id'
-        // },
-    },
-    keyword:Sequelize.STRING,
-    //  {
-    //     type: Sequelize.STRING,
-    //     allowNull: false
-    // },
     jobProviderName: {
         type: Sequelize.STRING,
         allowNull: false
@@ -83,6 +66,15 @@ const jobDetailModel = {
         type: Sequelize.STRING,
         allowNull: true
     },
+    isAccepted: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
+    },
+    jobSeekerId: {
+        type: Sequelize.BIGINT,
+        allowNull: true,
+    },
+
     jobSeekerName: {
         type: Sequelize.STRING,
         allowNull: true
@@ -95,7 +87,6 @@ const jobDetailModel = {
         type: Sequelize.BIGINT,
         allowNull: true,
     }
-
 }
 
 

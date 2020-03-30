@@ -53,6 +53,7 @@ const jobProviderModel = {
     type: Sequelize.STRING,
     allowNull: true
   },
+  
   isVerified: {
     type: Sequelize.BOOLEAN,
     defaultValue: false

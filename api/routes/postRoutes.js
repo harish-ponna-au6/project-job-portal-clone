@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const router = Router();
 
-const { userRegister,postingJob, userLogin} = require("../controllers/postControllers")
+const { userRegister,postingJob, userLogin, forgotPasswordOTP} = require("../controllers/postControllers")
 
 const {authenticateProvidersToken, authenticateSeekersToken} = require("../middlewares/authenticate")
 
@@ -10,15 +10,17 @@ const {authenticateProvidersToken, authenticateSeekersToken} = require("../middl
 
 
 
-// //-----------------Job Providers Routes-----------------------
+//-----------------Job Provider Route-----------------------
 router.post(`/api/jobprovider/postingjob`, authenticateProvidersToken, postingJob);
 
-// //--------------------Register Route for Job - Provider/Seeker ------------------
+ //--------------------Account Register Route (Job-Provider & Job-Seeker)------------------
 router.post(`/api/user/register`,  userRegister); // parameter 'email' is name of that email input fiels
 
-// //--------------------Login/Logout Routes for Job - Provider/Seeker ----------------------
+ //--------------------Login Route (Job-Provider & Job-Seeker) ----------------------
 router.post(`/api/user/login`,userLogin); 
 
+//  -------Forgot Password (Sending OTP to Email to Reset Password)
+router.post(`/api/user/forgotpassword`,forgotPasswordOTP)
 
 
 

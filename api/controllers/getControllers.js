@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken")
 
 module.exports = {
 
+// -----------------Searching Available Jobs--------------------
     async searchNotYetAcceptedJobs(req, res) {
         try {
             const jobs = await JobDetails.findAndCountAll({
@@ -13,270 +14,136 @@ module.exports = {
                 limit: 5,
                 order: [['updatedAt', 'DESC']]
             })
-            res.status(302).json({ 'jobs': jobs })
+            res.status(200).json({ 'jobs': jobs })
         }
         catch (err) {
-            console.log(err)
-            res.sendStatus(500)
+            return res.status(500).send(error.message)
         }
     },
 
-    async filterJobs(req, res){
+// -----------------Searching Job by Job id--------------------
+    async searchJobById (req, res) {
+        try {
+            const job = await JobDetails.findOne({where:{ isAccepted: false, id: req.params.jobid }})
+            console.log(job)
+            return res.status(200).json(job)
+        } catch (error) {
+            return res.status(500).send(error.message)
+        }
+    },
+
+    // -----------------Viewing Available Jobs--------------------
+    async filterJobs(req, res) {
         try {
             if (!req.query) res.return("Please enter a definite query to filter out jobs")
             if (req.query.category) {
                 console.log("Request.Query.Category = ", req.query.category);
-                var jobs =  await JobDetails.findAndCountAll({
-                where: { isAccepted: false, category: req.query.category },
-                offset: (((req.params.pagenumber) - 1) * 5),
-                limit: 5,
-                order: [['updatedAt', 'DESC']]
-            })
-            console.log("req.query.category = ", jobs )
-           }            
-            if (req.query.city) { 
                 var jobs = await JobDetails.findAndCountAll({
-                where: { isAccepted: false, city: req.query.city },
-                offset: (((req.params.pagenumber) - 1) * 5),
-                limit: 5,
-                order: [['updatedAt', 'DESC']]
-            })
-             console.log("req.query.city = ", jobs ) }
+                    where: { isAccepted: false, category: req.query.category },
+                    offset: (((req.params.pagenumber) - 1) * 5),
+                    limit: 5,
+                    order: [['updatedAt', 'DESC']]
+                })
+            }
+            if (req.query.city) {
+                var jobs = await JobDetails.findAndCountAll({
+                    where: { isAccepted: false, city: req.query.city },
+                    offset: (((req.params.pagenumber) - 1) * 5),
+                    limit: 5,
+                    order: [['updatedAt', 'DESC']]
+                })
+            }
             if (req.query.pincode) {
                 var jobs = await JobDetails.findAndCountAll({
-                where: { isAccepted: false, city: req.query.pincode },
-                offset: (((req.params.pincode) - 1) * 5),
-                limit: 5,
-                order: [['updatedAt', 'DESC']]
-            })
-            console.log("req.query.pincode = ", jobs ) }      
-            if (req.query.preference) { 
+                    where: { isAccepted: false, city: req.query.pincode },
+                    offset: (((req.params.pincode) - 1) * 5),
+                    limit: 5,
+                    order: [['updatedAt', 'DESC']]
+                })
+            }
+            if (req.query.preference) {
                 var jobs = await JobDetails.findAndCountAll({
-                where: { isAccepted: false, preference: req.query.preference },
-                offset: (((req.params.pagenumber) - 1) * 5),
-                limit: 5,
-                order: [['updatedAt', 'DESC']]
-            }) 
-            console.log("req.query.prefeerence = ", jobs )}
-            if (req.query.keyword) { 
+                    where: { isAccepted: false, preference: req.query.preference },
+                    offset: (((req.params.pagenumber) - 1) * 5),
+                    limit: 5,
+                    order: [['updatedAt', 'DESC']]
+                })
+            }
+            if (req.query.keyword) {
                 var jobs = await JobDetails.findAndCountAll({
-                where: { isAccepted: false, keyword: req.query.keyword },
-                offset: (((req.params.pagenumber) - 1) * 5),
-                limit: 5,
-                order: [['updatedAt', 'DESC']]
-            })
-            console.log("req.query.keyword = ", jobs )
-             }
-             res.status(302).json({ 'jobs': jobs })
+                    where: { isAccepted: false, keyword: req.query.keyword },
+                    offset: (((req.params.pagenumber) - 1) * 5),
+                    limit: 5,
+                    order: [['updatedAt', 'DESC']]
+                })
+            }
+            res.status(200).json({ 'jobs': jobs })
         } catch (error) {
             console.log(error)
-            res.sendStatus(500)
+            res.status(500).send(error.message)
         }
     },
 
-    // searchJobsByCategory: function (req, res) {
-    //     JobDetail.find({ isAccepted: false, category: req.params.category })
-    //         .skip(((req.params.pagenumber) - 1) * 5)
-    //         .limit(5)
-    //         .sort({ createdAt: -1 })
-    //         .then((categoryJobs) => {
-    //             JobDetail.find({ category: req.params.category })
-    //                 .countDocuments({}, function (err, count) { console.log("count = ", count); res.status(302).json({ 'count': count, 'categoryJobs': categoryJobs }) });
-
-    //         })
-    //         .catch((err) => {
-    //             console.log(err.message)
-    //             return res.status(404).send(err.message)
-    //         });
-    // },
-    // searchJobsByCity: function (req, res) {
-    //     JobDetail.find({ isAccepted: false, city: req.params.city })
-    //         .skip(((req.params.pagenumber) - 1) * 5)
-    //         .limit(5)
-    //         .sort({ timestamps: -1 })
-    //         .then((cityJobs) => {
-    //             JobDetail.find({ city: req.params.city })
-    //                 .countDocuments({}, function (err, count) { console.log("count = ", count); res.status(302).json({ 'count': count, 'cityJobs': cityJobs }) });
-
-    //         })
-    //         .catch((err) => {
-    //             console.log(err.message)
-    //             return res.status(404).send(err.message)
-    //         });
-    // },
-    // searchJobsByPincode: function (req, res) {
-    //     JobDetail.find({ isAccepted: false, pincode: req.params.pincode })
-    //         .skip(((req.params.pagenumber) - 1) * 5)
-    //         .limit(5)
-    //         .sort({ timestamps: -1 })
-    //         .then((pincodeJobs) => {
-    //             JobDetail.find({ pincode: req.params.pincode })
-    //                 .countDocuments({}, function (err, count) { console.log("count = ", count); res.status(302).json({ 'count': count, 'pincodeJobs': pincodeJobs }) });
-
-    //         })
-    //         .catch((err) => {
-    //             console.log(err.message)
-    //             return res.status(404).send(err.message)
-    //         });
-    // },
-    // searchJobById: function (req, res) {
-    //     JobDetail.find({ isAccepted: false, _id: req.params.jobid })
-    //         .then((job) => {
-    //             res.status(302).json(job)
-    //         })
-    //         .catch((err) => {
-    //             console.log(err.message)
-    //             return res.status(404).send(err.message)
-    //         });
-    // },
-    // searchJobByKeyword: function (req, res) {
-    //     JobDetail.find({ isAccepted: false, keyword: req.params.keyword })
-    //         .skip(((req.params.pagenumber) - 1) * 5)
-    //         .limit(5)
-    //         .sort({ timestamps: -1 })
-    //         .then((keywordJobs) => {
-    //             JobDetail.find({ keyword: req.params.keyword })
-    //                 .countDocuments({}, function (err, count) { console.log("count = ", count); res.status(302).json({ 'count': count, 'keywordJobs': keywordJobs }) });
-    //         })
-    //         .catch((err) => {
-    //             console.log(err.message)
-    //             return res.status(404).send(err.message)
-    //         });
-    // },
-    // searchAllJobs: function (req, res) {
-
-    //     JobDetail.find({})
-    //         .skip(((req.params.pagenumber) - 1) * 5)
-    //         .limit(5)
-    //         .sort({ createdAt: 1 })
-    //         .then((allJobs) => {
-    //             JobDetail.find({})
-    //                 .countDocuments({}, function (err, count) { console.log("count = ", count); res.status(302).json({ 'count': count, 'allJobs': allJobs }) });
-
-    //         })
-    //         .catch((err) => {
-    //             console.log(err.message)
-    //             return res.status(404).send(err.message)
-    //         });
-    // },
-    // searchAcceptedJobs: function (req, res) {
-
-    //     JobDetail.find({ isAccepted: true })
-    //         .skip(((req.params.pagenumber) - 1) * 5)
-    //         .limit(5)
-    //         .sort({ createdAt: 1 })
-    //         .then((allAcceptedJobs) => {
-    //             JobDetail.find({})
-    //                 .countDocuments({}, function (err, count) { console.log("count = ", count); res.status(302).json({ 'count': count, 'allAcceptedJobs': allAcceptedJobs }) });
-    //         })
-    //         .catch((err) => {
-    //             console.log(err.message)
-    //             return res.status(404).send(err.message)
-    //         });
-    // },
-    // allJobsAcceptedTillDateByAParticularSeeker: function (req, res) {
-    //     // JobDetail.find({jobSeekerDetail:req.jobSeeker._id})
-    //     // .then((seekerJobs)=>res.status(200).json(seekerJobs))
-    //     // .catch((err) => {
-    //     //     console.log(err.message)
-    //     //     return res.status(404).send(err.message)
-    //     // });
-    //     JobDetail.find({ jobSeekerId: req.jobSeeker._id })
-    //         .skip(((req.params.pagenumber) - 1) * 5)
-    //         .limit(5)
-    //         .sort({ createdAt: 1 })
-    //         .then((seekerJobs) => {
-    //             JobDetail.find({ jobSeekerId: req.jobSeeker._id })
-    //                 .countDocuments({}, function (err, count) { console.log("count = ", count); res.status(302).json({ 'count': count, 'seekerJobs': seekerJobs }) });
-    //         })
-    //         .catch((err) => {
-    //             console.log(err.message)
-    //             return res.status(404).send(err.message)
-    //         });
-    // },
-    // jobsPostedByAParticularProvider: function (req, res) {
-    //     JobDetail.find({ jobProviderId: req.jobProvider._id })
-    //         .skip(((req.params.pagenumber) - 1) * 5)
-    //         .limit(5)
-    //         .sort({ createdAt: 1 })
-    //         .then((providerJobs) => {
-    //             JobDetail.find({ jobProviderId: req.jobProvider._id })
-    //                 .countDocuments({}, function (err, count) { console.log("count = ", count); res.status(302).json({ 'count': count, 'providerJobs': providerJobs }) });
-    //         })
-    //         .catch((err) => {
-    //             console.log(err.message)
-    //             return res.status(404).send(err.message)
-    //         });
-    // },
-    async providerAccountActivation(req, res) {
+    // --------------------Viewing Accepted Jobs by Seeker-----------------
+    async allJobsAcceptedTillDateByAParticularSeeker(req, res) {
         try {
-            if (!req.params.activationtoken) return res.status(401)
-            const payload = await jwt.verify(req.params.activationtoken, process.env.TEMP_TOKEN_SECRET);
-            if (payload) {
-                const updated = await JobProviderDetails.update({ isVerified: true, activationToken: " " }, {
-                    where: {
-                        activationToken: req.params.activationtoken
-                    }
-                })
-                console.log(updated);
-                if(updated[0]!==0) return res.status(200).send("Account activated Successfully");
-                return res.status(401).send("Account already activated")
-            }
-             res.send("Invalid Token")
-        }
-        catch (err) {
-            console.log(err);
-            return res.sendStatus(500)
+            const jobs = await JobDetails.findAndCountAll({
+                where: { jobSeekerId: req.jobSeeker.id },
+                offset: (((req.params.pagenumber) - 1) * 5),
+                limit: 5,
+                order: [['updatedAt', 'DESC']]
+            })
+            return res.status(200).send({ allJobsAcceptedTillDateByAParticularSeeker: jobs })
+
+
+        } catch (error) {
+            console.log(error.message)
+            return res.status(500).send(error.message)
         }
     },
-
-    async seekerAccountActivation(req, res) {
+    
+       // --------------------Viewing Accepted Jobs by Seeker-----------------
+    async jobsPostedByAParticularProvider(req, res) {
         try {
-            if (!req.params.activationtoken) return res.status(401)
-            const payload = await jwt.verify(req.params.activationtoken, process.env.TEMP_TOKEN_SECRET);
-            if (payload) {
-                const updated=await JobSeekerDetails.update({ isVerified: true, activationToken: null }, {
-                    where: {
-                        activationToken: req.params.activationtoken
-                    }
-                })
-                console.log(updated);
-                if(updated[0]!==0) return res.status(200).send("Account activated Successfully");
-                return res.status(401).send("Account already activated")
-            }
-            return res.send("Invalid Token")
-        }
-        catch (err) {
-            console.log(err);
-            res.sendStatus(500)
+            const jobs = await JobDetails.findAndCountAll({
+                where: { jobProviderId: req.jobProvider.id },
+                offset: (((req.params.pagenumber) - 1) * 5),
+                limit: 5,
+                order: [['updatedAt', 'DESC']]
+            })
+            return res.status(200).send({ allJobsPostedTillDateByAParticularProvider: jobs })
+
+        } catch (error) {
+            console.log(error.message)
+            return res.status(500).send(error.message)
         }
     },
 
-
+    // ---------------------Account Activation (Job-Provider & Job-Seeker)-----------------------
     async accountActivation(req, res) {
         try {
-            if(!req.query.user) throw new Error("invalid route")
-            if(req.query.user==="Job-Provider") model =JobProviderDetails
-            if(req.query.user==="Job-Seeker") model =JobSeekerDetails
+            if (!req.query.user) throw new Error("invalid route")
+
+            else if (req.query.user === "Job-Provider") model = JobProviderDetails
+            else if (req.query.user === "Job-Seeker") model = JobSeekerDetails;
+            else throw new Error("invalid route")
 
 
             if (!req.params.activationtoken) return res.status(401)
             const payload = await jwt.verify(req.params.activationtoken, process.env.TEMP_TOKEN_SECRET);
             if (payload) {
-                const updated=await model.update({ isVerified: true, activationToken: null }, {
+                const updated = await model.update({ isVerified: true, activationToken: null }, {
                     where: {
                         activationToken: req.params.activationtoken
                     }
                 })
-                console.log(updated);
-                if(updated[0]!==0) return res.status(200).send("Account activated Successfully");
-                return res.status(401).send("Account already activated")
+                if (updated[0] !== 0) return res.status(202).send("Account activated Successfully");
+                return res.status(304).send("Account already activated")
             }
             return res.send("Invalid Token")
         }
         catch (err) {
-            console.log(err);
-            res.sendStatus(500)
+            res.status(500).send(err.message)
         }
     },
 }
