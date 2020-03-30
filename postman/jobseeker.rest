@@ -4,7 +4,7 @@
 ###################  GET 
 
 ###  Account Activation
-GET http://localhost:8080/api/seekeraccountactivation/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MC43OTUwNjIzMTk3NjcxNDQsImlhdCI6MTU4NTU1MjcyMX0.Vl-4NNenpmIU6jQIp7Lg48E5Mch2jxMCwR4I_twUBSg
+GET http://localhost:8080/api/seekeraccountactivation/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MC42OTIzNDMwNTk4MDE0ODU1LCJpYXQiOjE1ODU1NjM4MjZ9.WJvs_M-dsrzfwkuZSXjIhMToG2lltE5P15SyzY7kk_Q
 
 ### showing all jobs which are available
 GET http://localhost:8080/api/jobseeker/searchjobs/notyetaccepted/1/
@@ -57,16 +57,26 @@ content-type: application/json
 
 ###   Uploading Profile Picture
 POST http://localhost:8080/api/jobseeker/uploadprofilepicture
-Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNTg1NTU4MzAyLCJleHAiOjE1OTE1NTgzMDJ9.xmTNVe_wLcBwNzenDDFUJhp5rzgJnTRpj1ENYcmDUiY
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNTg1NTYwNTU3LCJleHAiOjE1OTE1NjA1NTd9.UD3yefq57e5vnTVAfFaB_D-2OuD0XddhlfjVr_W5L08
 
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="text"
+
+title
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="image"; filename="hari.jpeg"
+Content-Type: image/jpeg
+
+< C:\Users\Harish\Desktop\hari.jpeg
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
 
 ###################  UPDATE
 
 ###   Job Accepting by Seeker
-PATCH http://localhost:8080/api/jobseeker/searchjobs/byjobid/3/isaccepted
+PATCH http://localhost:8080/api/jobseeker/searchjobs/byjobid/1/isaccepted
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNTg1NTU4MzAyLCJleHAiOjE1OTE1NTgzMDJ9.xmTNVe_wLcBwNzenDDFUJhp5rzgJnTRpj1ENYcmDUiY
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNTg1NTYzOTEyLCJleHAiOjE1OTE1NjM5MTJ9.SXOaVWKT4pIBTxaKAY9JTNMD83m5oXPAXHZFglE7foI
 
 
 ###  Logging out from Seeker Account
