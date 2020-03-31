@@ -1,12 +1,13 @@
 const JobDetails = require("../models/Job")
 const JobProviderDetails = require("../models/JobProvider")
-const JobSeekerDetails = require("../models/jobSeeker")
+const JobSeekerDetails = require("../models/JobSeeker")
+
 const jwt = require("jsonwebtoken")
 
 module.exports = {
 
 // -----------------Searching Available Jobs--------------------
-    async searchNotYetAcceptedJobs(req, res) {
+    async allAvailableJobs(req, res) {
         try {
             const jobs = await JobDetails.findAndCountAll({
                 where: { isAccepted: false },
@@ -144,6 +145,49 @@ module.exports = {
         }
         catch (err) {
             res.status(500).send(err.message)
+        }
+    },
+
+    // ------------------- All Accepted Jobs----------------------
+    async allAcceptedJobs(req,res) {
+        try {
+            console.log("hai")
+            const jobs = await JobDetails.findAndCountAll({
+                where: { isAccepted: true },
+                offset: (((req.params.pagenumber) - 1) * 5),
+                limit: 5,
+                order: [['updatedAt', 'DESC']]
+            })
+            return res.status(200).json({ count:jobs.count,jobs:jobs.rows })
+        } catch (error) {
+            return res.status(500).send(error.message)
+        }
+    },
+    async allProviders(req,res) {
+        try {
+            const jobProviders = await JobProviderDetails.findAndCountAll({
+                where: { isVerified: true },
+                offset: (((req.params.pagenumber) - 1) * 5),
+                limit: 5,
+                order: [['updatedAt', 'DESC']]
+            })
+            return res.status(200).json({ count:jobProviders.count,jobProviders:jobProviders.rows })
+        } 
+        catch (error) {
+            return res.status(500).send(error.message)
+        }
+    },
+    async allSeekers(req,res) {
+        try {
+            const jobSeekers = await JobSeekerDetails.findAndCountAll({
+                where: { isVerified: true },
+                offset: (((req.params.pagenumber) - 1) * 5),
+                limit: 5,
+                order: [['updatedAt', 'DESC']]
+            })
+            return res.status(200).json({ count:jobSeekers.count,jobSeekers:jobSeekers.rows })
+        } catch (error) {
+            return res.status(500).send(error.message)
         }
     }
 }

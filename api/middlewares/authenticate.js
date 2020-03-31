@@ -1,5 +1,6 @@
 var JobProviderDetails = require("../models/JobProvider");
-var JobSeekerDetails = require("../models/jobSeeker");
+var JobSeekerDetails = require("../models/JobSeeker");
+const AdminDetails = require("../models/Admin")
 const jwt = require("jsonwebtoken");
 
 module.exports = {
@@ -29,13 +30,29 @@ module.exports = {
             const token = req.header('Authorization')
             if (!token) return res.sendStatus(401)
             const payload = await jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
-            console.log("PAYLOAD = ", payload)
             if (!payload.id) {
                 return res.sendStatus(403)
             }
             const jobSeeker = await JobSeekerDetails.findOne({ where: { id: payload.id, jwt: token } })
             if (!jobSeeker) return res.sendStatus(401)
             req.jobSeeker = jobSeeker
+            next()
+        } catch (err) {
+            console.log(err)
+            res.sendStatus(500)
+        }
+    },
+    async authenticateAdminsToken (req,res,next){
+        try {
+            const token = req.header('Authorization')
+            if (!token) return res.sendStatus(401)
+            const payload = await jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
+            if (!payload.id) {
+                return res.sendStatus(403)
+            }
+            const admin = await AdminDetails.findOne({where:{id: payload.id, jwt: token}})
+            if(!admin) return res.sendStatus(401)
+            req.admin = admin
             next()
         } catch (err) {
             console.log(err)

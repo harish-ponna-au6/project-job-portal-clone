@@ -16,7 +16,7 @@ module.exports = {
     async updatingJob(req, res) {
         try {
             await JobDetails.update({ ...req.body }, {
-                where: { id: req.params.jobid }
+                where: { id: req.params.jobid, isAccepted:false }
             })
             console.log("job updated successfully by provider")
             return res.status(202).send('Job updated successfully by Job-Provider')

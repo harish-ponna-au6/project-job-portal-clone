@@ -16,7 +16,7 @@ router.post(`/api/jobprovider/postingjob`, authenticateProvidersToken, postingJo
  //--------------------Account Register Route (Job-Provider & Job-Seeker)------------------
 router.post(`/api/user/register`,  userRegister); // parameter 'email' is name of that email input fiels
 
- //--------------------Login Route (Job-Provider & Job-Seeker) ----------------------
+ //--------------------Login Route (Admin & Job-Provider & Job-Seeker) ----------------------
 router.post(`/api/user/login`,userLogin); 
 
 //  -------Forgot Password (Sending System generated password to Email)

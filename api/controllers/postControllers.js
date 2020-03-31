@@ -1,6 +1,7 @@
 const JobDetails = require("../models/Job");
 const JobProviderDetails = require("../models/JobProvider");
-const JobSeekerDetails = require("../models/jobSeeker");
+const JobSeekerDetails = require("../models/JobSeeker");
+const AdminDetails = require("../models/Admin");
 const jwt = require("jsonwebtoken");
 const { hash, compare } = require("bcryptjs")
 const Joi = require("@hapi/joi");
@@ -24,7 +25,7 @@ module.exports = {
       job.save();
       const user = await JobProviderDetails.findOne({ where: { id: req.jobProvider.id } });
       const totalPosted = jobProviderJobsIncrement(user.totalPosted);
-      JobProviderDetails.update({ totalPosted: totalPosted },
+      await JobProviderDetails.update({ totalPosted: totalPosted },
         {
           where: {
             id: req.jobProvider.id,
@@ -64,7 +65,7 @@ module.exports = {
       user.activationToken = activationToken;
       user.save()
       sendMailToUser(`${userType}`, req.body.email, activationToken);
-      res.status(202).send(`${userType} account registered Successfully`);
+      res.status(202).send(`${userType} account registered Successfully. An email has been sent to your gmail to activate your account`);
     }
     catch (err) {
       if (err.name === "SequelizeValidationError")
@@ -80,14 +81,17 @@ module.exports = {
       if (!email || !password)
         return res.status(400).send("Incorrect credentials");
 
-      if (req.body.role == "Job-Provider") model = JobProviderDetails;
-      if (req.body.role == "Job-Seeker") model = JobSeekerDetails;
+      if (req.body.role == "Job-Provider")var model = JobProviderDetails;
+      if (req.body.role == "Job-Seeker")var model = JobSeekerDetails;
+      if (req.body.role == "Admin") var model = AdminDetails;
 
       const user = await model.findOne({ where: { email } });
       if (!user) return res.status(400).send("Incorrect credentials");
-      const isMatched = compare(password, user.password);
+      const isMatched = await compare(password, user.password);
+      console.log("isMatched=",isMatched)
       if (!isMatched) throw new Error("Invalid credentials");
-      if (!user.isVerified) return res.status(401).send("Job Provider not verified, please activate link sent to you through Email");
+      
+      if (!user.isVerified) return res.status(401).send(`${model} not verified, please activate link sent to you through Email`);
       console.log(user)
       const token = await jwt.sign({ id: user.id }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 1000 * 600 * 10 })
       user.jwt = token;
