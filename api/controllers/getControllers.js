@@ -14,7 +14,7 @@ module.exports = {
                 limit: 5,
                 order: [['updatedAt', 'DESC']]
             })
-            res.status(200).json({ 'jobs': jobs })
+            res.status(200).json({ count:jobs.count,jobs:jobs.rows })
         }
         catch (err) {
             return res.status(500).send(error.message)
