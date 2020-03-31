@@ -14,9 +14,9 @@ module.exports = {
                 limit: 5,
                 order: [['updatedAt', 'DESC']]
             })
-            res.status(200).json({ count:jobs.count,jobs:jobs.rows })
+            return res.status(200).json({ count:jobs.count,jobs:jobs.rows })
         }
-        catch (err) {
+        catch (error) {
             return res.status(500).send(error.message)
         }
     },
@@ -32,7 +32,7 @@ module.exports = {
         }
     },
 
-    // -----------------Viewing Available Jobs--------------------
+    // -----------------Filtering Available Jobs--------------------
     async filterJobs(req, res) {
         try {
             if (!req.query) res.return("Please enter a definite query to filter out jobs")
@@ -77,10 +77,10 @@ module.exports = {
                     order: [['updatedAt', 'DESC']]
                 })
             }
-            res.status(200).json({ 'jobs': jobs })
+            return res.status(200).json({ 'jobs': jobs })
         } catch (error) {
             console.log(error)
-            res.status(500).send(error.message)
+            return res.status(500).send(error.message)
         }
     },
 
@@ -102,7 +102,7 @@ module.exports = {
         }
     },
     
-       // --------------------Viewing Accepted Jobs by Seeker-----------------
+       // --------------------Viewing All Posted Jobs by A Provider-----------------
     async jobsPostedByAParticularProvider(req, res) {
         try {
             const jobs = await JobDetails.findAndCountAll({
@@ -145,5 +145,5 @@ module.exports = {
         catch (err) {
             res.status(500).send(err.message)
         }
-    },
+    }
 }

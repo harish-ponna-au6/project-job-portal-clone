@@ -1,6 +1,6 @@
 const JobDetails = require("../models/Job")
 const JobProviderDetails = require("../models/JobProvider")
-const JobSeekerDetails = require("../models/jobSeeker")
+const JobSeekerDetails = require("../models/JobSeeker")
 
 function jobProviderJobsDecrement(totalPosted) {
     return totalPosted -= 1
