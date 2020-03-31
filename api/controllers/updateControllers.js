@@ -100,24 +100,5 @@ module.exports = {
         } catch (error) {
             return res.status(500).send(error.message)
         }
-    },
-
-    // ---------------------------Reseting Password (Job-Provider & Job-Seeker)-----------
-    async resetPassword(req, res) {
-        try {
-            if (!req.body.OTP || !req.body.password) { throw new Error("Invalid credentials") }
-            if (req.body.role === 'Job-Provider') { var model = JobProviderDetails; role = req.body.role }
-            else if (req.body.role === 'Job-Seeker') { var model = JobSeekerDetails; role = req.body.role }
-            else{return res.send("Enter role correctly")}
-            const hashedPassword = await hash(req.body.password,10)
-            const updated = await model.update({password:hashedPassword,activationToken:null},{
-                where :{activationToken:req.body.OTP}
-            })
-            if(updated[0]===0) return res.status(401).send("Invalid OTP")
-            return res.status(202).send("Password reset successfully")
-        } catch (error) {
-            return res.status(500).send(error.message)
-        }
     }
 }
-

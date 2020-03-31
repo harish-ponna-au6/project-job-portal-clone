@@ -49,13 +49,13 @@ function isAcceptedMailToSeeker(emailSeeker,title,postedOn,providerName) {
     }).catch((err) => console.log(err.message))
 }
 
-function forgotPasswordMailing(email,activationToken) {
+function forgotPasswordMailing(email,password) {
     transport.sendMail({
         from: process.env.GMAIL,
         to: email,
-        subject: `OTP for  resetting your password on SeasonalEmployment.com`,
-        html: `<p>Enter the given OTP in SeasonalEmployment.com to reset your password</p>.
-        <h2>OTP: ${activationToken}</h2>`
+        subject: `System generated password for for logging In on SeasonalEmployment.com`,
+        html: `<p>This password is system generated password to login into your account on <b>SeasonalEmployment.com</b>. Please Login and change your password in profile section.</p>
+        <h3>Password: ${password}`
     }).then((response) => {
         console.log(response);
     }).catch((err) => console.log(err.message))

@@ -100,18 +100,20 @@ module.exports = {
   },
 
   // --------------------------- Forgot Password to send OTP -------------------------
-  async forgotPasswordOTP(req, res) {
+  async forgotPassword(req, res) {
     try {
       if (req.body.role == "Job-Provider") model = JobProviderDetails;
       if (req.body.role == "Job-Seeker") model = JobSeekerDetails;
       if(!req.body.role) return res.send("Incorrect Credentials")
       const user =await model.findOne({ where: { email: req.body.email, aadhaarNumber: req.body.aadhaarNumber, isVerified: true } });
+      console.log(user)
       if (!user) return res.send("Incorrect Credentials or kindly activate your account by visiting the link that has been sent to you")
-      const activationToken = Math.floor(Math.random()*1000000)
-      user.activationToken = activationToken;
+      const rawPassword = (Math.floor(Math.random()*100000000)).toString();
+      const hashedPassword = await hash(rawPassword,10)
+      user.password = hashedPassword;
       user.save();
-      forgotPasswordMailing(req.body.email, activationToken)
-      return res.status(202).send("OTP has been sent to your email successfully to reset your password")
+      forgotPasswordMailing(req.body.email, rawPassword)
+      return res.status(202).send("A system generated password has been sent to your email successfully. Login with that password and edit your password in profile section")
     } catch (err) {
       return res.status(500).send(err.message)
     }

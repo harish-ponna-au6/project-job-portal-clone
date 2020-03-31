@@ -55,6 +55,16 @@ content-type: application/json
     "role":"Job-Seeker"
 }
 
+### forgot passsword sending system generated password
+POST http://localhost:8080/api/user/forgotpassword
+Content-Type: application/json
+
+{
+  "email":"harishponna55@gmail.com",
+  "role":"Job-Provider",
+  "aadhaarNumber":123456789789
+}
+
 ###   Uploading Profile Picture
 PATCH http://localhost:8080/api/jobseeker/uploadprofilepicture
 Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW

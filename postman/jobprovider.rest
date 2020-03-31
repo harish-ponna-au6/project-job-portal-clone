@@ -3,21 +3,12 @@
 ################ GET
 
 ###  Provider Account Activation
-GET http://localhost:8080/api/provideraccountactivation/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MC44MDA3MTAyMTM3MDUzMzU1LCJpYXQiOjE1ODU1MTM2ODJ9.t-K8-zvtcweq-BUsXOi3RJfKuAo1i1QnsG0sps6iS2Q
-###
 GET http://localhost:8080/api/accountactivation/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MC4yOTY1MDU1MTI3OTY5OTA2NywiaWF0IjoxNTg1NTc0MzkwfQ.MrnU1uXK0EHSF5BpT0Vxyeq-yPwuY5TENZ4zv7s165A?user=Job-Provider
 
 ###  Showing provider his own posted jobs
 GET http://localhost:8080/api/jobprovider/jobspostedtilldate/1/
 Content-Type: application/json
 Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNTg1NTc0OTYzLCJleHAiOjE1OTE1NzQ5NjN9.RK43Yvt3hcJ8tkUYY9V7iq7qSRnx1mQ_enYFBUFyMws
-
-
-
-###
-GET http://localhost:8080/api/provideraccountactivation/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MC4yODMwMjMzNTcwMjk1ODE1LCJpYXQiOjE1ODUyODQyMDN9.8qZQUqo5LQWoPAfhTyuAyV6Y1_FNjJn8Gm_-98E1BSQ
-
-
 
 
 ################ POST
@@ -65,12 +56,12 @@ Content-Type: application/json
 
  {  
    "email": "harishponna55@gmail.com",
-   "password": "123456",   
+   "password": "11805549",   
    "role" : "Job-Provider" 
   }
 
 
-###
+### forgot passsword sending system generated password
 POST http://localhost:8080/api/user/forgotpassword
 Content-Type: application/json
 
@@ -126,16 +117,6 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNTg1NTc0
   "password":"1234567890"
 }
 
-### reset password
-PATCH http://localhost:8080/api/user/resetpassword
-Content-Type: application/json
-
-{
-  "role":"Job-Provider",
-  "OTP":769120,
-  "password":"123456"
-}
-
 
 
 ################ DELETE
@@ -148,4 +129,4 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNTg1NTY1
 ###  Logging out from Provider Account
 DELETE http://localhost:8080/api/user/jobprovider/logout/
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNTg1NTY1MDM5LCJleHAiOjE1OTE1NjUwMzl9.yqt1IE8p8JUo5UZ6FJhGn-Kq0FIiKRVrSy9Ne_LlCMc
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNTg1NTc0OTYzLCJleHAiOjE1OTE1NzQ5NjN9.RK43Yvt3hcJ8tkUYY9V7iq7qSRnx1mQ_enYFBUFyMws

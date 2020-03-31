@@ -8,7 +8,6 @@ const {
     uploadProfilePicture,
     editProfile,
     editPassword,
-    resetPassword
 } = require("../controllers/updateControllers")
 
 // ----------------------------Job Provider Routes-------------------
@@ -24,8 +23,7 @@ router.patch(`/api/jobseeker/uploadprofilepicture`, authenticateSeekersToken, up
 router.patch(`/api/jobseeker/editprofile`, authenticateSeekersToken, editProfile)
 router.patch(`/api/jobseeker/editpassword`, authenticateSeekersToken, editPassword)
 
-// --------------------Password Reset via OTP Route(Job-Provider & Job-Seeker)------------------
-router.patch(`/api/user/resetpassword`,resetPassword)
+
 
 
 module.exports = router;

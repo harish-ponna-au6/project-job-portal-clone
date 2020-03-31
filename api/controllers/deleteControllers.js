@@ -23,7 +23,7 @@ module.exports = {
     },
 
     // ----------------------Logout from Account (Job-Provider & Job-Seeker)------------------------
-    async Logout(req, res) {
+    async userLogout(req, res) {
         try {
             if (req.jobProvider) { var model = JobProviderDetails; var user = req.jobProvider }
             if (req.jobSeekers) { var model = JobSeekerDetails; var user = req.jobSeeker }
