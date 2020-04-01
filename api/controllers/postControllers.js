@@ -91,7 +91,7 @@ module.exports = {
       console.log("isMatched=",isMatched)
       if (!isMatched) throw new Error("Invalid credentials");
       
-      if (user.isBlocked) return res.status(401).send(`${user.name} you are blocked for the misuse of SeasonalEmployment.com.....`);
+      if (user.isBlocked) return res.status(401).send(`${user.name}, you are blocked for the misuse of SeasonalEmployment.com.....`);
       if (!user.isVerified) return res.status(401).send(`${user.name}, you are not verified, please activate link sent to you through Email`);
       console.log(user)
       const token = await jwt.sign({ id: user.id }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 1000 * 600 * 10 })
@@ -113,7 +113,7 @@ module.exports = {
       const user =await model.findOne({ where: { email: req.body.email, aadhaarNumber: req.body.aadhaarNumber, isVerified: true } });
       console.log(user)
       if (!user) return res.send("Incorrect Credentials or kindly activate your account by visiting the link that has been sent to you ")
-      if(user.isBlocked)  return res.status(401).send(`${user.name} you are blocked for the misuse of SeasonalEmployment.com.....`);
+      if(user.isBlocked)  return res.status(401).send(`${user.name}, you are blocked for the misuse of SeasonalEmployment.com.....`);
       const rawPassword = (Math.floor(Math.random()*100000000)).toString();
       const hashedPassword = await hash(rawPassword,10)
       user.password = hashedPassword;
