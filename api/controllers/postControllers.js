@@ -23,7 +23,7 @@ module.exports = {
       job.jobProviderEmail = req.jobProvider.email;
       job.jobProviderName = req.jobProvider.name;
       job.save();
-      const user = await JobProviderDetails.findOne({ where: { id: req.jobProvider.id } });
+      const user = await JobProviderDetails.findOne({ where: { id: req.jobProvider.id, isBlocked:false } });
       const totalPosted = jobProviderJobsIncrement(user.totalPosted);
       await JobProviderDetails.update({ totalPosted: totalPosted },
         {

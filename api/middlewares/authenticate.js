@@ -15,6 +15,7 @@ module.exports = {
                 return res.sendStatus(403)
             }
             const jobProvider = await JobProviderDetails.findOne({ where: { id: payload.id, jwt: token } })
+            if (jobProvider.isBlocked) return res.status(401).send(`${jobProvider.name}, you are blocked for the misuse of SeasonalEmployment.com.....`);
             if (!jobProvider) return res.sendStatus(401)
             req.jobProvider = jobProvider
             next()
@@ -34,6 +35,7 @@ module.exports = {
                 return res.sendStatus(403)
             }
             const jobSeeker = await JobSeekerDetails.findOne({ where: { id: payload.id, jwt: token } })
+            if (jobSeeker.isBlocked) return res.status(401).send(`${jobSeeker.name}, you are blocked for the misuse of SeasonalEmployment.com.....`);
             if (!jobSeeker) return res.sendStatus(401)
             req.jobSeeker = jobSeeker
             next()
@@ -51,6 +53,7 @@ module.exports = {
                 return res.sendStatus(403)
             }
             const admin = await AdminDetails.findOne({where:{id: payload.id, jwt: token}})
+            if (admin.isBlocked) return res.status(401).send(`${admin.name}, you are blocked for the misuse of SeasonalEmployment.com.....`);
             if(!admin) return res.sendStatus(401)
             req.admin = admin
             next()

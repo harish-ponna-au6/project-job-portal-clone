@@ -16,7 +16,7 @@ module.exports = {
     async updatingJob(req, res) {
         try {
             await JobDetails.update({ ...req.body }, {
-                where: { id: req.params.jobid, isAccepted:false }
+                where: { id: req.params.jobid, isAccepted:false, isBlocked:false }
             })
             console.log("job updated successfully by provider")
             return res.status(202).send('Job updated successfully by Job-Provider')
@@ -29,11 +29,11 @@ module.exports = {
     // --------------------Accepting Job by Job Seeker---------------
     async isAcceptedJob(req, res) {
         try {
-            var jobOne = await JobDetails.findOne({ where: { isAccepted: false, id: req.params.jobid } })
+            var jobOne = await JobDetails.findOne({ where: { isAccepted: false, id: req.params.jobid, isBlocked:false } })
             if (jobOne.isAccepted) return res.send("Job has already been accepted")
 
             const [count, job] = await JobDetails.update({ isAccepted: true, jobSeekerId: req.jobSeeker.id, jobSeekerName: req.jobSeeker.name, jobSeekerContactNumber: req.jobSeeker.contactNumber, jobSeekerAadhaarNumber: req.jobSeeker.aadhaarNumber }, {
-                where: { id: req.params.jobid },
+                where: { id: req.params.jobid, isBlocked:false },
                 returning: true,
                 plain: true
             })
@@ -60,7 +60,7 @@ module.exports = {
             let imageContent = convertBufferToString(req.file.originalname, req.file.buffer)
             let imageResponse = await cloudinary.uploader.upload(imageContent)
             await model.update({ profilePicture: imageResponse.secure_url }, {
-                where: { id: user.id }
+                where: { id: user.id, isBlocked:false }
             })
             res.status(202).send("uploaded Profile picture successfully")
         } catch (error) {
@@ -74,7 +74,7 @@ module.exports = {
             if (req.jobProvider) { var model = JobProviderDetails; user = req.jobProvider }
             if (req.jobSeeker) { var model = JobSeekerDetails; user = req.jobSeeker }
             await model.update({ contactNumber: req.body.contactNumber, address: req.body.address }, {
-                where: { id: user.id }
+                where: { id: user.id, isBlocked:false }
             })
             return res.status(202).send("Profile Updated successfully")
         } catch (error) {
@@ -92,7 +92,8 @@ module.exports = {
             console.log("user=", user)
             await model.update({ password: hashedPassword }, {
                 where: {
-                    id: user.id
+                    id: user.id,
+                    isBlocked:false
                 }
             })
             return res.status(202).send("Password changed successfully")
