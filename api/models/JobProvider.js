@@ -57,6 +57,10 @@ const jobProviderModel = {
   isVerified: {
     type: Sequelize.BOOLEAN,
     defaultValue: false
+  },
+  isBlocked:{
+      type:Sequelize.BOOLEAN,
+      defaultValue:false
   }
 }
 

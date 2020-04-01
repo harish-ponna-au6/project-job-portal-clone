@@ -27,7 +27,7 @@ module.exports = {
     async userLogout(req, res) {
         try {
             if (req.jobProvider) { var model = JobProviderDetails; var user = req.jobProvider }
-            if (req.jobSeekers) { var model = JobSeekerDetails; var user = req.jobSeeker }
+            if (req.jobSeeker) { var model = JobSeekerDetails; var user = req.jobSeeker }
             if (req.admin) { var model = AdminDetails; var user = req.admin }
             await model.update({ jwt: null }, {
                 where: { id: user.id }

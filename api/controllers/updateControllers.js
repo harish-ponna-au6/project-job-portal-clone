@@ -29,8 +29,8 @@ module.exports = {
     // --------------------Accepting Job by Job Seeker---------------
     async isAcceptedJob(req, res) {
         try {
-            var isAccepted = await JobDetails.findOne({ where: { isAccepted: false, id: req.params.jobid } })
-            if (!isAccepted) return res.send("Job has already been accepted")
+            var jobOne = await JobDetails.findOne({ where: { isAccepted: false, id: req.params.jobid } })
+            if (jobOne.isAccepted) return res.send("Job has already been accepted")
 
             const [count, job] = await JobDetails.update({ isAccepted: true, jobSeekerId: req.jobSeeker.id, jobSeekerName: req.jobSeeker.name, jobSeekerContactNumber: req.jobSeeker.contactNumber, jobSeekerAadhaarNumber: req.jobSeeker.aadhaarNumber }, {
                 where: { id: req.params.jobid },
@@ -98,6 +98,24 @@ module.exports = {
             return res.status(202).send("Password changed successfully")
 
         } catch (error) {
+            return res.status(500).send(error.message)
+        }
+    },
+
+    // ----------------------------------------Admin Blocking-----------------------------------------------
+    async blocking(req,res){
+        try {
+            if(req.query.model==="Job-Provider") var model = JobProviderDetails;
+            else if(req.query.model==="Job-Seeker") var model = JobSeekerDetails;
+            else if(req.query.model==="Job") var model = JobDetails;
+            else return res.send("please input valid query in route");
+            const update = await model.update({isBlocked:true},{
+                where:{id:req.params.id}
+            });
+            if(update[0]===0) res.send("Invalid Id");
+            return res.status(202).send("Blocked Succesfully")
+        } catch (error) {
+            console.log(error)
             return res.status(500).send(error.message)
         }
     }

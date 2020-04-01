@@ -6,26 +6,26 @@ const jwt = require("jsonwebtoken")
 
 module.exports = {
 
-// -----------------Searching Available Jobs--------------------
+    // -----------------Searching Available Jobs--------------------
     async allAvailableJobs(req, res) {
         try {
             const jobs = await JobDetails.findAndCountAll({
-                where: { isAccepted: false },
+                where: { isAccepted: false, isBlocked: false },
                 offset: (((req.params.pagenumber) - 1) * 5),
                 limit: 5,
                 order: [['updatedAt', 'DESC']]
             })
-            return res.status(200).json({ count:jobs.count,jobs:jobs.rows })
+            return res.status(200).json({ count: jobs.count, jobs: jobs.rows })
         }
         catch (error) {
             return res.status(500).send(error.message)
         }
     },
 
-// -----------------Searching Job by Job id--------------------
-    async searchJobById (req, res) {
+    // -----------------Searching Job by Job id--------------------
+    async searchJobById(req, res) {
         try {
-            const job = await JobDetails.findOne({where:{ isAccepted: false, id: req.params.jobid }})
+            const job = await JobDetails.findOne({ where: { isAccepted: false, id: req.params.jobid, isBlocked: false } })
             console.log(job)
             return res.status(200).json(job)
         } catch (error) {
@@ -40,7 +40,7 @@ module.exports = {
             if (req.query.category) {
                 console.log("Request.Query.Category = ", req.query.category);
                 var jobs = await JobDetails.findAndCountAll({
-                    where: { isAccepted: false, category: req.query.category },
+                    where: { isAccepted: false, category: req.query.category, isBlocked: false },
                     offset: (((req.params.pagenumber) - 1) * 5),
                     limit: 5,
                     order: [['updatedAt', 'DESC']]
@@ -48,7 +48,7 @@ module.exports = {
             }
             if (req.query.city) {
                 var jobs = await JobDetails.findAndCountAll({
-                    where: { isAccepted: false, city: req.query.city },
+                    where: { isAccepted: false, city: req.query.city, isBlocked: false },
                     offset: (((req.params.pagenumber) - 1) * 5),
                     limit: 5,
                     order: [['updatedAt', 'DESC']]
@@ -56,7 +56,7 @@ module.exports = {
             }
             if (req.query.pincode) {
                 var jobs = await JobDetails.findAndCountAll({
-                    where: { isAccepted: false, city: req.query.pincode },
+                    where: { isAccepted: false, city: req.query.pincode, isBlocked: false },
                     offset: (((req.params.pincode) - 1) * 5),
                     limit: 5,
                     order: [['updatedAt', 'DESC']]
@@ -64,7 +64,7 @@ module.exports = {
             }
             if (req.query.preference) {
                 var jobs = await JobDetails.findAndCountAll({
-                    where: { isAccepted: false, preference: req.query.preference },
+                    where: { isAccepted: false, preference: req.query.preference, isBlocked: false },
                     offset: (((req.params.pagenumber) - 1) * 5),
                     limit: 5,
                     order: [['updatedAt', 'DESC']]
@@ -72,13 +72,13 @@ module.exports = {
             }
             if (req.query.keyword) {
                 var jobs = await JobDetails.findAndCountAll({
-                    where: { isAccepted: false, keyword: req.query.keyword },
+                    where: { isAccepted: false, keyword: req.query.keyword, isBlocked: false },
                     offset: (((req.params.pagenumber) - 1) * 5),
                     limit: 5,
                     order: [['updatedAt', 'DESC']]
                 })
             }
-            return res.status(200).json({ 'jobs': jobs })
+            return res.status(200).json({ count: jobs.count, jobs: jobs.rows })
         } catch (error) {
             console.log(error)
             return res.status(500).send(error.message)
@@ -86,15 +86,16 @@ module.exports = {
     },
 
     // --------------------Viewing Accepted Jobs by Seeker-----------------
+
     async allJobsAcceptedTillDateByAParticularSeeker(req, res) {
         try {
             const jobs = await JobDetails.findAndCountAll({
-                where: { jobSeekerId: req.jobSeeker.id },
+                where: { jobSeekerId: req.jobSeeker.id, isBlocked: false },
                 offset: (((req.params.pagenumber) - 1) * 5),
                 limit: 5,
                 order: [['updatedAt', 'DESC']]
             })
-            return res.status(200).send({ allJobsAcceptedTillDateByAParticularSeeker: jobs })
+            return res.status(200).send({ count:jobs.count,allJobsAcceptedTillDateByAParticularSeeker: jobs.rows })
 
 
         } catch (error) {
@@ -102,17 +103,18 @@ module.exports = {
             return res.status(500).send(error.message)
         }
     },
-    
-       // --------------------Viewing All Posted Jobs by A Provider-----------------
+
+    // --------------------Viewing All Posted Jobs by A Provider-----------------
+
     async jobsPostedByAParticularProvider(req, res) {
         try {
             const jobs = await JobDetails.findAndCountAll({
-                where: { jobProviderId: req.jobProvider.id },
+                where: { jobProviderId: req.jobProvider.id, isBlocked: false },
                 offset: (((req.params.pagenumber) - 1) * 5),
                 limit: 5,
                 order: [['updatedAt', 'DESC']]
             })
-            return res.status(200).send({ allJobsPostedTillDateByAParticularProvider: jobs })
+            return res.status(200).send({ count:jobs.count,allJobsPostedTillDateByAParticularProvider: jobs.rows })
 
         } catch (error) {
             console.log(error.message)
@@ -135,10 +137,10 @@ module.exports = {
             if (payload) {
                 const updated = await model.update({ isVerified: true, activationToken: null }, {
                     where: {
-                        activationToken: req.params.activationtoken
+                        activationToken: req.params.activationtoken, isBlocked: false
                     }
                 })
-                if (updated[0] !== 0) return res.status(202).send("Account activated Successfully");
+                if (updated[0] !== 0) return res.status(202).send("Account activated Successfully, Please visit SeasonalEmployment.com and Login");
                 return res.status(304).send("Account already activated")
             }
             return res.send("Invalid Token")
@@ -148,8 +150,25 @@ module.exports = {
         }
     },
 
+
+    // --------------------------Admin Routes------------------------------------------------------------------------
+// -----------------------------All Jobs-----------------------------------
+    async allAvailableJobsincludingBlocked(req, res) {
+        try {
+            const jobs = await JobDetails.findAndCountAll({
+                where: { isAccepted: false },
+                offset: (((req.params.pagenumber) - 1) * 5),
+                limit: 5,
+                order: [['updatedAt', 'DESC']]
+            })
+            return res.status(200).json({ count: jobs.count, jobs: jobs.rows })
+        }
+        catch (error) {
+            return res.status(500).send(error.message)
+        }
+    },
     // ------------------- All Accepted Jobs----------------------
-    async allAcceptedJobs(req,res) {
+    async allAcceptedJobs(req, res) {
         try {
             console.log("hai")
             const jobs = await JobDetails.findAndCountAll({
@@ -158,12 +177,14 @@ module.exports = {
                 limit: 5,
                 order: [['updatedAt', 'DESC']]
             })
-            return res.status(200).json({ count:jobs.count,jobs:jobs.rows })
+            return res.status(200).json({ count: jobs.count, jobs: jobs.rows })
         } catch (error) {
             return res.status(500).send(error.message)
         }
     },
-    async allProviders(req,res) {
+
+    // --------------All Providers List------------------------------------------------
+    async allProviders(req, res) {
         try {
             const jobProviders = await JobProviderDetails.findAndCountAll({
                 where: { isVerified: true },
@@ -171,13 +192,16 @@ module.exports = {
                 limit: 5,
                 order: [['updatedAt', 'DESC']]
             })
-            return res.status(200).json({ count:jobProviders.count,jobProviders:jobProviders.rows })
-        } 
+            return res.status(200).json({ count: jobProviders.count, jobProviders: jobProviders.rows })
+        }
         catch (error) {
             return res.status(500).send(error.message)
         }
     },
-    async allSeekers(req,res) {
+
+    // --------------All Seekers List------------------------------------------------
+
+    async allSeekers(req, res) {
         try {
             const jobSeekers = await JobSeekerDetails.findAndCountAll({
                 where: { isVerified: true },
@@ -185,7 +209,7 @@ module.exports = {
                 limit: 5,
                 order: [['updatedAt', 'DESC']]
             })
-            return res.status(200).json({ count:jobSeekers.count,jobSeekers:jobSeekers.rows })
+            return res.status(200).json({ count: jobSeekers.count, jobSeekers: jobSeekers.rows })
         } catch (error) {
             return res.status(500).send(error.message)
         }

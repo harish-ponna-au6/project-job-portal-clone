@@ -85,13 +85,14 @@ module.exports = {
       if (req.body.role == "Job-Seeker")var model = JobSeekerDetails;
       if (req.body.role == "Admin") var model = AdminDetails;
 
-      const user = await model.findOne({ where: { email } });
+      const user = await model.findOne({ where: { email} });
       if (!user) return res.status(400).send("Incorrect credentials");
       const isMatched = await compare(password, user.password);
       console.log("isMatched=",isMatched)
       if (!isMatched) throw new Error("Invalid credentials");
       
-      if (!user.isVerified) return res.status(401).send(`${model} not verified, please activate link sent to you through Email`);
+      if (user.isBlocked) return res.status(401).send(`${user.name} you are blocked for the misuse of SeasonalEmployment.com.....`);
+      if (!user.isVerified) return res.status(401).send(`${user.name}, you are not verified, please activate link sent to you through Email`);
       console.log(user)
       const token = await jwt.sign({ id: user.id }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 1000 * 600 * 10 })
       user.jwt = token;
@@ -111,7 +112,8 @@ module.exports = {
       if(!req.body.role) return res.send("Incorrect Credentials")
       const user =await model.findOne({ where: { email: req.body.email, aadhaarNumber: req.body.aadhaarNumber, isVerified: true } });
       console.log(user)
-      if (!user) return res.send("Incorrect Credentials or kindly activate your account by visiting the link that has been sent to you")
+      if (!user) return res.send("Incorrect Credentials or kindly activate your account by visiting the link that has been sent to you ")
+      if(user.isBlocked)  return res.status(401).send(`${user.name} you are blocked for the misuse of SeasonalEmployment.com.....`);
       const rawPassword = (Math.floor(Math.random()*100000000)).toString();
       const hashedPassword = await hash(rawPassword,10)
       user.password = hashedPassword;

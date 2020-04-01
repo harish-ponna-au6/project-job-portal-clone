@@ -86,6 +86,10 @@ const jobDetailModel = {
     jobSeekerAadhaarNumber: {
         type: Sequelize.BIGINT,
         allowNull: true,
+    },
+    isBlocked:{
+        type:Sequelize.BOOLEAN,
+        defaultValue:false
     }
 }
 

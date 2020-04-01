@@ -1,4 +1,4 @@
-const  Sequelize = require("sequelize");
+const Sequelize = require("sequelize");
 const sequelize = require("../../db");
 
 
@@ -15,18 +15,21 @@ const adminModel = {
     type: Sequelize.STRING,
     allowNull: false
   },
-  jwt:{
+  jwt: {
     type: Sequelize.STRING,
     allowNull: true
   },
-  isVerified:{
-    type:Sequelize.BOOLEAN,
-    allowNull:false,
-    defaultValue:false
+  isVerified: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: false
+  },
+  isBlocked: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: false
   }
 }
 
-const AdminDetails = sequelize.define("adminDetail", adminModel,{
+const AdminDetails = sequelize.define("adminDetail", adminModel, {
   sequelize
 })
 
