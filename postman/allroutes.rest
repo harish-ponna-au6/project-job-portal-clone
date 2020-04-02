@@ -31,10 +31,10 @@ Content-Type: application/json
 ### Posting a job by provider
 POST http://localhost:8080/api/jobprovider/postingjob
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNTg1NzI3MzYyLCJleHAiOjE1OTE3MjczNjJ9.BTHY0kqB-zeMF615fTq37yJxwD5jR1RS4zfnmm_Rdjs
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNTg1ODM4MzgwLCJleHAiOjE1OTE4MzgzODB9.yqzb5tG5T1BfgNCrlmSOOXTLW-JgPBN7Hm8acW-eumQ
 
 {
-            "category":"weekly",
+            "category":"daily",
             "duration": 5,
             "title":"piano tutor",
             "description":"piano teaching for my kid",
@@ -114,7 +114,7 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNTg1NzI3
 ### updating editing  password 
 PATCH http://localhost:8080/api/jobprovider/editpassword
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNTg1NzI3MzYyLCJleHAiOjE1OTE3MjczNjJ9.BTHY0kqB-zeMF615fTq37yJxwD5jR1RS4zfnmm_Rdjs
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNTg1ODMxMTE5LCJleHAiOjE1OTE4MzExMTl9.pCh0cu029YZEII4AnJrlJbpcWS60-xAScjpe13pJ0vc
 
 {
   "password":"123456"
@@ -148,18 +148,18 @@ POST http://localhost:8080/api/user/register
 content-type: application/json
 
 {
-  	"name": "Siddhida",
-    "email":"jhasiddhida@gmail.com",
+  	"name": "harish",
+    "email":"harishponna55@gmail.com",
     "password":"123456",
-   "aadhaarNumber" :123456789889,
+   "aadhaarNumber" :123416789889,
   "gender":"female",
-   "contactNumber" : 1234567897,
+   "contactNumber" : 1234567899,
    "address" : "Ranchi abcdefghtikjjh",
    "role" : "Job-Seeker"
 }
 
 ###  Account Activation
-GET http://localhost:8080/api/accountactivation/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MC4xMjIxNDY4MTIzODM0NzA1OCwiaWF0IjoxNTg1NzI4MTM5fQ.MVgMaykPymc9_qxHo5mhBvQxqs0xXYtKoibuQrQQcE0?user=Job-Seeker
+GET http://localhost:8080/api/accountactivation/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MC45NTEyNzI3NjQ0MDk5MzM3LCJpYXQiOjE1ODU4Mzg2MDV9.DgAK0ZIJB1B_T7b5HjURWgveb82aL4L4ce8_3GLpnGg?user=Job-Seeker
 
 
 ###   Login into Seeker Account
@@ -167,7 +167,7 @@ POST http://localhost:8080/api/user/login
 content-type: application/json
 
 {
-    "email":"jhasiddhida@gmail.com",
+    "email":"harishponna55@gmail.com",
     "password":"123456",
     "role":"Job-Seeker"
 }
@@ -270,23 +270,22 @@ Content-Type: application/json
 
 ### view all available(including blocked) jobs
 GET http://localhost:8080/api/admin/allavailablejobs/1
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNTg1NzMxMjc3LCJleHAiOjE1OTE3MzEyNzd9.sYROB7e1bV0WC2mJrVZcizoPsF79q88UoAeW2ysVYe4
-
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTgzNDNjY2ZjMTZmODFkOTg2ZmI3YTIiLCJpYXQiOjE1ODU4Mzk2OTQsImV4cCI6MTY0NTgzOTY5NH0.4K1gx6-tEpxXZVRvDDXl6VsBJwhA2jR3Hnm-70OzzLM
 ### view all accepted jobs
 GET http://localhost:8080/api/admin/allacceptedjobs/1
 Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNTg1NzMxMjc3LCJleHAiOjE1OTE3MzEyNzd9.sYROB7e1bV0WC2mJrVZcizoPsF79q88UoAeW2ysVYe4
 
 ### view all Providers
 GET http://localhost:8080/api/admin/allproviders/1
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNTg1NzMxMjc3LCJleHAiOjE1OTE3MzEyNzd9.sYROB7e1bV0WC2mJrVZcizoPsF79q88UoAeW2ysVYe4
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTgzNDNjY2ZjMTZmODFkOTg2ZmI3YTIiLCJpYXQiOjE1ODU4Mzk2OTQsImV4cCI6MTY0NTgzOTY5NH0.4K1gx6-tEpxXZVRvDDXl6VsBJwhA2jR3Hnm-70OzzLM
 
 ### view all seekers
 GET http://localhost:8080/api/admin/allseekers/1
 Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNTg1NzQwNDExLCJleHAiOjE1OTE3NDA0MTF9.wZ8NK9nKRzwB6ugLyMVJcLUfEfrnStbIY8qZugdL4bE
 
 ### Blocking
-PATCH http://localhost:8080/api/admin/4/isblocked/?model=Job-Seeker   
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNTg1NzQwNDExLCJleHAiOjE1OTE3NDA0MTF9.wZ8NK9nKRzwB6ugLyMVJcLUfEfrnStbIY8qZugdL4bE
+PATCH http://localhost:8080/api/admin/5e8462d55c40d0372ccbe1f0/isblocked/?model=Job-Provider   
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTgzNDNjY2ZjMTZmODFkOTg2ZmI3YTIiLCJpYXQiOjE1ODU4Mzk2OTQsImV4cCI6MTY0NTgzOTY5NH0.4K1gx6-tEpxXZVRvDDXl6VsBJwhA2jR3Hnm-70OzzLM
 
 ### logout
 DELETE http://localhost:8080/api/admin/logout/

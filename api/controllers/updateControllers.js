@@ -12,11 +12,11 @@ function jobSeekerJobsIncrement(totalPosted) {
 }
 
 module.exports = {
-// -------------------Updating Job by Job-Provider---------------
+    // -------------------Updating Job by Job-Provider---------------
     async updatingJob(req, res) {
         try {
             await JobDetails.update({ ...req.body }, {
-                where: { id: req.params.jobid, isAccepted:false, isBlocked:false }
+                where: { id: req.params.jobid, isAccepted: false, isBlocked: false }
             })
             console.log("job updated successfully by provider")
             return res.status(202).send('Job updated successfully by Job-Provider')
@@ -29,11 +29,11 @@ module.exports = {
     // --------------------Accepting Job by Job Seeker---------------
     async isAcceptedJob(req, res) {
         try {
-            var jobOne = await JobDetails.findOne({ where: { isAccepted: false, id: req.params.jobid, isBlocked:false } })
+            var jobOne = await JobDetails.findOne({ where: { isAccepted: false, id: req.params.jobid, isBlocked: false } })
             if (jobOne.isAccepted) return res.send("Job has already been accepted")
 
             const [count, job] = await JobDetails.update({ isAccepted: true, jobSeekerId: req.jobSeeker.id, jobSeekerName: req.jobSeeker.name, jobSeekerContactNumber: req.jobSeeker.contactNumber, jobSeekerAadhaarNumber: req.jobSeeker.aadhaarNumber }, {
-                where: { id: req.params.jobid, isBlocked:false },
+                where: { id: req.params.jobid, isBlocked: false },
                 returning: true,
                 plain: true
             })
@@ -60,7 +60,7 @@ module.exports = {
             let imageContent = convertBufferToString(req.file.originalname, req.file.buffer)
             let imageResponse = await cloudinary.uploader.upload(imageContent)
             await model.update({ profilePicture: imageResponse.secure_url }, {
-                where: { id: user.id, isBlocked:false }
+                where: { id: user.id, isBlocked: false }
             })
             res.status(202).send("uploaded Profile picture successfully")
         } catch (error) {
@@ -74,7 +74,7 @@ module.exports = {
             if (req.jobProvider) { var model = JobProviderDetails; user = req.jobProvider }
             if (req.jobSeeker) { var model = JobSeekerDetails; user = req.jobSeeker }
             await model.update({ contactNumber: req.body.contactNumber, address: req.body.address }, {
-                where: { id: user.id, isBlocked:false }
+                where: { id: user.id, isBlocked: false }
             })
             return res.status(202).send("Profile Updated successfully")
         } catch (error) {
@@ -87,13 +87,15 @@ module.exports = {
         try {
             if (req.jobProvider) { var model = JobProviderDetails; user = req.jobProvider }
             if (req.jobSeeker) { var model = JobSeekerDetails; user = req.jobSeeker }
+
+
             const hashedPassword = await hash(req.body.password, 10)
             console.log("hashed=", hashedPassword)
             console.log("user=", user)
             await model.update({ password: hashedPassword }, {
                 where: {
                     id: user.id,
-                    isBlocked:false
+                    isBlocked: false
                 }
             })
             return res.status(202).send("Password changed successfully")
@@ -104,16 +106,24 @@ module.exports = {
     },
 
     // ----------------------------------------Admin Blocking-----------------------------------------------
-    async blocking(req,res){
+    async blocking(req, res) {
         try {
-            if(req.query.model==="Job-Provider") var model = JobProviderDetails;
-            else if(req.query.model==="Job-Seeker") var model = JobSeekerDetails;
-            else if(req.query.model==="Job") var model = JobDetails;
+            if (req.query.model === "Job-Provider") var model = JobProviderDetails;
+            else if (req.query.model === "Job-Seeker") var model = JobSeekerDetails;
+            else if (req.query.model === "Job") var model = JobDetails;
             else return res.send("please input valid query in route");
-            const update = await model.update({isBlocked:true},{
-                where:{id:req.params.id}
+            const update = await model.update({ isBlocked: true }, {
+                where: { id: req.params.id }
             });
-            if(update[0]===0) res.send("Invalid Id");
+            if (update[0] === 0) res.send("Invalid Id");
+            if (req.query.model === "Job-Provider") {
+                const blockedJobsObj = await JobDetails.update({ isBlocked: true }, {
+                    where: {
+                        jobProviderId: req.params.id
+                    }
+                })
+
+            }
             return res.status(202).send("Blocked Succesfully")
         } catch (error) {
             console.log(error)
