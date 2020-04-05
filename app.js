@@ -1,11 +1,21 @@
 const express = require("express");
 const dotenv = require("dotenv");
+const helmet = require("helmet");
+const compression = require("compression");
+const morgan = require("morgan")
+const fs = require("fs");
+const path = require("path");
+
 dotenv.config();
 require("./db")
 
 const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json())
+app.use(helmet())
+app.use(compression());
+const accessLogsStream = fs.createWriteStream(path.join(__dirname, 'access.log'), {Flags : 'a' })
+app.use(morgan('combined', {stream : accessLogsStream })) 
 
 // ---------------------Removing CORS error-----------------------
 
@@ -25,7 +35,6 @@ app.use(require("./api/routes/getRoutes"))
 app.use(require("./api/routes/postRoutes"))
 app.use(require("./api/routes/updateRoutes"))
 app.use(require("./api/routes/deleteRoutes"))
-
 
 
 module.exports = app;

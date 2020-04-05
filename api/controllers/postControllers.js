@@ -57,7 +57,12 @@ module.exports = {
 
       if (req.body.role == "Job-Provider") { var model = JobProviderDetails; var userType = "Job-Provider" }
       if (req.body.role == "Job-Seeker") { var model = JobSeekerDetails; var userType = "Job-Seeker" }
-
+      const emailCheck = await model.findOne({where:{ email: req.body.email }})
+      console.log(emailCheck)
+      if (emailCheck) return res.send("Duplicate Email");
+      const aadhaarCheck = await model.findOne({where:{ aadhaarNumber: req.body.aadhaarNumber }})
+      console.log(aadhaarCheck)
+      if (aadhaarCheck) return res.send("Duplicate aadhaarnumber");
       const activationToken = await jwt.sign({ id: Math.random() }, process.env.TEMP_TOKEN_SECRET)
       const user = await model.create({ ...req.body });
       const hashedPassword = await hash(req.body.password, 10);
