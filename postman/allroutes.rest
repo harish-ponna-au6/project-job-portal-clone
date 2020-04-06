@@ -24,7 +24,7 @@ Content-Type: application/json
 
  {  
    "email": "harishponna55@gmail.com",
-   "password": "123456",   
+   "password": "64970183",   
    "role" : "Job-Provider" 
   }
 
