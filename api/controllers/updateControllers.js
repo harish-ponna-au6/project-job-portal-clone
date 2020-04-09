@@ -1,5 +1,5 @@
 const JobDetails = require("../models/Job")
-const JobSeekerDetails = require("../models/jobSeeker")
+const JobSeekerDetails = require("../models/JobSeeker")
 const JobProviderDetails = require("../models/JobProvider")
 const { isAcceptedMailToSeeker, isAcceptedMailToProvider } = require("../utils/nodeMailer")
 const { hash } = require("bcryptjs")
